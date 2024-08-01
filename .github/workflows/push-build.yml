@@ -34,12 +34,12 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t my-docker-image:latest .
+          docker build -t dipl-rad-tours-service:latest .
 
       - name: Tag Docker image
         run: |
-          docker tag my-docker-image:latest ${{ secrets.ECR_REGISTRY }}/my-docker-image:latest
+          docker tag dipl-rad-tours-service:latest ${{ secrets.ECR_REGISTRY }}/dipl-rad-tours-service:latest
 
       - name: Push Docker image to ECR
         run: |
-          docker push ${{ secrets.ECR_REGISTRY }}/my-docker-image:latest
+          docker push ${{ secrets.ECR_REGISTRY }}/dipl-rad-tours-service:latest
