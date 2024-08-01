@@ -38,7 +38,7 @@ func startServer(handler *handler.TourHandler) {
 func main() {
 	database := initDB()
 	if database == nil {
-		print("FAILED TO CONNECT TO DB")
+		print("FAILED TO CONNECT TO DATABASE")
 		return
 	}
 	repo := &repo.TourRepository{DatabaseConnection: database}
