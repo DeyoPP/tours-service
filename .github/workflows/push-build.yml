@@ -39,10 +39,10 @@ jobs:
         run: |
           docker build -t dipl-rad-tours-service .
 
-      - name: Extract version
-        id: extract_version
+      - name: Read version
+        id: read_version
         run: |
-          VERSION=$(echo $GITHUB_SHA | cut -c1-8)
+          VERSION=$(cat VERSION)
           echo "IMAGE_TAG=${VERSION}" >> $GITHUB_ENV
 
       - name: Tag Docker image
