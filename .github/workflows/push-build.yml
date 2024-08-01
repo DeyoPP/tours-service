@@ -20,7 +20,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0  # Full history for semantic-release
+          fetch-depth: 0  # Full history for versioning
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
@@ -35,15 +35,28 @@ jobs:
         run: |
           aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin ${{ secrets.ECR_REGISTRY }}
 
+      - name: Read current version
+        id: read_version
+        run: |
+          if [ -f VERSION ]; then
+            VERSION=$(cat VERSION)
+            VERSION_NUMBER=$(echo $VERSION | sed 's/v//')
+          else
+            VERSION_NUMBER=0
+          fi
+          echo "VERSION_NUMBER=${VERSION_NUMBER}" >> $GITHUB_ENV
+
+      - name: Increment version number
+        id: increment_version
+        run: |
+          NEW_VERSION_NUMBER=$((VERSION_NUMBER + 1))
+          NEW_VERSION="v${NEW_VERSION_NUMBER}"
+          echo $NEW_VERSION > VERSION
+          echo "IMAGE_TAG=${NEW_VERSION}" >> $GITHUB_ENV
+
       - name: Build Docker image
         run: |
           docker build -t dipl-rad-tours-service .
-
-      - name: Read version
-        id: read_version
-        run: |
-          VERSION=$(cat VERSION)
-          echo "IMAGE_TAG=${VERSION}" >> $GITHUB_ENV
 
       - name: Tag Docker image
         run: |
@@ -57,3 +70,11 @@ jobs:
         run: |
           docker tag dipl-rad-tours-service:latest ${{ secrets.ECR_REGISTRY }}:latest
           docker push ${{ secrets.ECR_REGISTRY }}:latest
+
+      - name: Commit and push version file
+        uses: EndBug/add-and-commit@v9
+        with:
+          add: 'VERSION'
+          message: 'Update VERSION file to ${{ env.IMAGE_TAG }}'
+          author_name: 'github-actions'
+          author_email: 'github-actions@github.com'
