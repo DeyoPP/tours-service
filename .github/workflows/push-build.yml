@@ -44,18 +44,22 @@ jobs:
 
       - name: Install semantic-release
         run: |
-          npm install -g semantic-release @semantic-release/cli
+          npm install -g semantic-release
 
       - name: Run semantic-release
         run: |
           semantic-release
 
+      - name: Extract version
+        id: extract_version
+        run: |
+          VERSION=$(npm pkg get version | sed 's/[^0-9.]//g')
+          echo "IMAGE_TAG=${VERSION}" >> $GITHUB_ENV
+
       - name: Tag Docker image
         run: |
-          # Replace with the version provided by semantic-release
-          IMAGE_TAG=$(npm pkg get version | sed 's/[^0-9.]//g')
-          docker tag dipl-rad-tours-service:latest ${{ secrets.ECR_REGISTRY }}:${IMAGE_TAG}
+          docker tag dipl-rad-tours-service:latest ${{ secrets.ECR_REGISTRY }}:${{ env.IMAGE_TAG }}
 
       - name: Push Docker image to ECR
         run: |
-          docker push ${{ secrets.ECR_REGISTRY }}:${IMAGE_TAG}
+          docker push ${{ secrets.ECR_REGISTRY }}:${{ env.IMAGE_TAG }}
