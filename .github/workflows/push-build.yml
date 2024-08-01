@@ -5,6 +5,7 @@ permissions:
   issues: write
   pull-requests: write
   contents: read
+  deployments: write  # Add this if using semantic-release for deployments
 
 on:
   push:
@@ -18,6 +19,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Fetch the full history for semantic-release
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
@@ -47,6 +50,8 @@ jobs:
           npm install -g semantic-release
 
       - name: Run semantic-release
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}  # Use the token from GitHub Secrets
         run: |
           semantic-release
 
