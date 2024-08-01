@@ -29,8 +29,4 @@ jobs:
 
       - name: Run Docker container
         run: |
-          docker run --rm tours-service:latest echo "Docker container is running"
-
-      - name: Test Docker image
-        run: |
-          docker run --rm tours-service:latest /app/tours-service --help
+          docker run --rm tours-service:latest ./tours-service --help
