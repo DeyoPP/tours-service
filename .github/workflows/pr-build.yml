@@ -1,8 +1,16 @@
 name: Build Docker Image on Pull Request
 
+permissions:
+  id-token: write
+  issues: write
+  pull-requests: write
+  contents: read
+  
 on:
   pull_request:
-    types: [opened, synchronize, reopened]
+    branches:
+      - main
+  workflow_dispatch:
 
 jobs:
   build:
