@@ -1,4 +1,4 @@
-# Use the official Golang image as a parent image
+# Use the official Golang image for Go 1.20
 FROM golang:1.20 as builder
 
 # Set the current working directory inside the container
@@ -13,8 +13,11 @@ RUN go mod download
 # Copy the rest of the application code
 COPY . .
 
-# Build the Go application
-RUN go build -o tours-service
+# Print directory contents for debugging
+RUN ls -la
+
+# Build the Go application with detailed error output
+RUN go build -v -o tours-service
 
 # Use a minimal base image for the final stage
 FROM debian:bullseye-slim
