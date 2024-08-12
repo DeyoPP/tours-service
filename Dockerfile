@@ -16,8 +16,8 @@ RUN go mod download
 # Copy the rest of the application code
 COPY . .
 
-# Build the Go application
-RUN go build -o tours-service
+# Build the Go application for Linux
+RUN GOOS=linux GOARCH=amd64 go build -o tours-service
 
 # Use a minimal base image for the final stage
 FROM alpine:latest
