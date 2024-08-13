@@ -1,3 +1,4 @@
+package model
 
 type TourInfo struct {
 	Name        string        `gorm:"column:name;type:varchar(255)" json:"name"`        // Column name and type
