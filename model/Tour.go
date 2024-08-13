@@ -1,15 +1,15 @@
 package model
 
+import (
+	"time"
+)
+
 type AccountStatus int
 
 const (
 	Draft AccountStatus = iota
 	Published
 	Archived
-)
-
-import (
-	"time"
 )
 
 type Tour struct {
