@@ -14,7 +14,7 @@ import (
 )
 
 func initDB() *gorm.DB {
-	connection_url := "user=postgres password=super dbname=SOA port=5432 sslmode=disable"
+	connection_url := "host=explorer-db.cscjwnksxo6a.eu-central-1.rds.amazonaws.com user=dejo password=sE7F0UY*8oDz-cbJ dbname=explorer-db port=5432 sslmode=disable"
 	database, err := gorm.Open(postgres.Open(connection_url), &gorm.Config{})
 
 	if err != nil {
@@ -25,6 +25,7 @@ func initDB() *gorm.DB {
 
 	return database
 }
+
 
 func startServer(handler *handler.TourHandler) {
 	router := mux.NewRouter()
