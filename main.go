@@ -11,10 +11,12 @@ import (
 	"github.com/gorilla/mux"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+	"os"
+
 )
 
 func initDB() *gorm.DB {
-	connection_url := "user=postgres password=super dbname=SOA port=5432 sslmode=disable"
+	connection_url := os.Getenv("DB_USER") + ":" + os.Getenv("DB_PASSWORD") + "@tcp(" + os.Getenv("DB_HOST") + ":" + os.Getenv("DB_PORT") + ")/" + os.Getenv("DB_NAME") + "?charset=utf8&parseTime=True&loc=Local"
 	database, err := gorm.Open(postgres.Open(connection_url), &gorm.Config{})
 
 	if err != nil {
@@ -25,6 +27,7 @@ func initDB() *gorm.DB {
 
 	return database
 }
+
 
 func startServer(handler *handler.TourHandler) {
 	router := mux.NewRouter()
