@@ -6,7 +6,8 @@ import (
 
 type Tour struct {
 	ID          int       `gorm:"primaryKey;autoIncrement" json:"id"`          // Primary key with auto-increment
-	Info        *TourInfo `gorm:"foreignKey:TourID" json:"info"`        // Foreign key reference (if applicable)
+	Info        *TourInfo `gorm:"foreignKey:tour_info_id" json:"info"`        // Foreign key reference (if applicable)
+	TourInfoID  int       `gorm:"column:tour_info_id;type:int" json:"tour_info_id"`    // Column name and type	
 	AuthorID    int       `gorm:"column:author_id;type:int" json:"author_id"`    // Column name and type
 	PublishTime time.Time `gorm:"column:publish_time;type:timestamp" json:"publish_time"` // Column name and type
 	Equipments  []int64   `gorm:"-" json:"equipments"`  // Ignore for now, adjust as needed
