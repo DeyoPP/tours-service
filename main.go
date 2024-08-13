@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"net/http"
+	"os"
 	"tours/handler"
 	"tours/model"
 	"tours/repo"
@@ -11,13 +12,19 @@ import (
 	"github.com/gorilla/mux"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
-	"os"
-
 )
 
 func initDB() *gorm.DB {
-	connection_url := os.Getenv("DB_USER") + ":" + os.Getenv("DB_PASSWORD") + "@tcp(" + os.Getenv("DB_HOST") + ":" + os.Getenv("DB_PORT") + ")/" + os.Getenv("DB_NAME") + "?charset=utf8&parseTime=True&loc=Local"
-	database, err := gorm.Open(postgres.Open(connection_url), &gorm.Config{})
+	// Retrieve database connection details from environment variables
+	user := os.Getenv("POSTGRES_USER")
+	password := os.Getenv("POSTGRES_PASSWORD")
+	dbname := os.Getenv("POSTGRES_DB")
+	host := os.Getenv("POSTGRES_HOST")
+	port := os.Getenv("POSTGRES_PORT")
+
+	// Construct the connection URL
+	connectionURL := "user=" + user + " password=" + password + " dbname=" + dbname + " host=" + host + " port=" + port + " sslmode=disable"
+	database, err := gorm.Open(postgres.Open(connectionURL), &gorm.Config{})
 
 	if err != nil {
 		print(err)
@@ -27,7 +34,6 @@ func initDB() *gorm.DB {
 
 	return database
 }
-
 
 func startServer(handler *handler.TourHandler) {
 	router := mux.NewRouter()
