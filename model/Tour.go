@@ -1,16 +1,16 @@
 package model
 
-import (
-	"time"
-)
+// import (
+// 	"time"
+// )
 
-type AccountStatus int
+// type AccountStatus int
 
-const (
-	Draft AccountStatus = iota
-	Published
-	Archived
-)
+// const (
+// 	Draft AccountStatus = iota
+// 	Published
+// 	Archived
+// )
 
 type Tour struct {
 	ID          int       `gorm:"primaryKey;autoIncrement" json:"id"`          // Primary key with auto-increment
