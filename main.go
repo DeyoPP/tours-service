@@ -38,11 +38,21 @@ func initDB() *gorm.DB {
 func startServer(handler *handler.TourHandler) {
 	router := mux.NewRouter()
 
+	// Define the health check route
+	router.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+	}).Methods("GET")
+	
+	router.HandleFunc("/status", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+	}).Methods("GET")
+	// Define other routes
 	router.HandleFunc("/createTour", handler.Create).Methods("POST")
 
 	println("Server starting")
 	log.Fatal(http.ListenAndServe(":8081", router))
 }
+
 
 func main() {
 	database := initDB()
